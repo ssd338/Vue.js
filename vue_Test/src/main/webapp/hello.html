@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+	<div id="app">
+  		{{ message }}<br>
+  		{{ name }}
+	</div>
+
+<script type="text/javascript">
+	var app = new Vue({
+	  el: '#app',
+	  data: {
+	    message: '안녕하세요 Vue!',
+	    name:"홍길동"
+	  }
+	})
+</script>
+
+<hr>
+<div id="app-2">
+	<span v-bind:title="message">
+		이순신	
+	</span>
+</div>
+
+<script type="text/javascript">
+	var app2 = new Vue({
+		el:"#app-2",
+		data:{
+			message:"이순신 장군입니다."
+		}
+	});
+</script>	
+<hr>
+
+<div id="app-3">
+	<p v-if="seen1">홍길동</p>
+	<p v-if="seen2">이순신</p>
+</div>
+
+<script type="text/javascript">
+	var app3 = new Vue({
+		el:"#app-3",
+		data:{
+			seen1:false,
+			seen2:true,
+		}
+	});
+</script>
+<hr>
+
+<div id="app-4">
+	<ol>
+		<li v-for="g in list">
+			{{ g.name }}
+		</li>
+	</ol>
+</div>
+
+<script type="text/javascript">
+	var app4 = new Vue({
+		el:"#app-4",
+		data:{
+			list:[
+				{name:"사과",price:500,qty:20},
+				{name:"포도",price:300,qty:20},
+				{name:"수박",price:700,qty:20}				
+				]			
+		}
+	});	
+</script>
+
+<hr>
+<div id="app-5">
+	<p>{{name}}</p>
+	<button v-on:click="pro">뒤집기</button>
+</div>
+
+<script type="text/javascript">
+	var app5 = new Vue({
+		el:"#app-5",
+		data:{
+			name:"이순신"
+		},
+		methods:{
+			pro:function(){
+				this.name = this.name.split("").reverse().join("");	
+			}
+		}
+		
+	});
+</script>
+
+<hr>
+<div id="app-6">
+	<p>{{name}}</p>
+	<input v-model="name">
+</div>
+
+<script type="text/javascript">
+	var app6 = new Vue({
+		el:"#app-6",
+		data:{
+			name:"이순신"
+		}
+	});
+</script>
+
+
+
+
+
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

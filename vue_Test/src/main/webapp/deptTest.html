@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script type="text/javascript" src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+</head>
+<body>
+	<h2>부서 관리 시스템</h2>
+	
+	<!-- 입력폼 -->
+	<form id="f" @submit.prevent>
+		부서번호:<input type="text" name="deptno" v-model="d.deptno"><br>
+		부서이름:<input type="text" name="dname" v-model="d.dname"><br>
+		부서위치:<input type="text" name="loc" v-model="d.loc"><br>
+		<button v-on:click="add">등록</button>
+		<button v-on:click="edit">수정</button>
+		<button v-on:click="remove">삭제</button>
+	</form>
+	
+	
+	<hr>
+	<!-- 부서목록 테이블 -->
+	<table border="1" width="80%" id="tb">
+		<thead>
+			<tr>
+				<th>부서번호</th>
+				<th>부서명</th>
+				<th>부서위치</th>
+			</tr>
+		</thead>
+		
+		<tbody>
+		<!-- 클릭시 입력폼에 해당 레코드(d)의 자료가 적히는 sel메소드가 동작한다. -->
+			<tr v-for="d in list" v-on:click="sel(d)">
+				<td>{{d.deptno}}</td>
+				<td>{{d.dname}} </td>
+				<td>{{d.loc}} </td>
+			</tr>
+		</tbody>
+	</table>
+	<!-- sel메소드 동작 -->
+	<script type="text/javascript">
+		axios.get("/listDept.do").then(function(res){
+			var tb = new Vue({
+				//id가 tb인 곳에 
+				el:"#tb",
+				// 응답받은 데이터를 list형식으로 
+				data:{
+					list:res.data
+				},
+				methods:{
+					//sel은 레코드가 클릭될시 동작하는 메소드
+					sel:function(d){
+						//input_form(f와 연결됨)에 d의 값을 넣음
+						input_form.d = d;
+					}
+				}
+			});
+		});	
+		//input_form
+		var input_form = new Vue({
+			//아이디가 f인곳이에서
+			el:"#f",
+			//data를 아래 형태고 가져옴
+			data:{
+				d:{deptno:"",dname:"",loc:""}
+			},
+			//각각 버튼에 따른 동작 메소드 - ajax을 호출해서 url을 호출하고 데이터d를 보냄
+			//여기서 보낸 d를 controller에서 map 형태로 받음
+			methods:{
+				add:function(){
+					url="/insertDept.do";
+					callAjax(url,this.d);
+				},
+				edit:function(){
+					url="/updateDept.do";
+					callAjax(url,this.d);
+				},
+				remove:function(){
+					url="/deleteDept.do";
+					callAjax(url,this.d);
+				}
+			}
+		});
+		
+		
+		function callAjax(url,data){
+			const axiosConfig = {
+					headers:{
+						"Content-Type":"application/x-www-form-urlencoded"							
+					}
+			}
+			
+			console.log("부서번호"+data.deptno);
+			console.log("부서명:"+data.dname);
+			console.log("부서위치"+data.loc);
+			console.log(data);
+			
+			/*
+			axios.post(url,data,axiosConfig).then(function(res){
+				location.href = "deptTest.html";
+			});
+			*/
+			axios.post(url,data).then(function(res){
+				location.href = "deptTest.html";
+			});
+		}
+		
+	</script>
+</body>
+</html>
